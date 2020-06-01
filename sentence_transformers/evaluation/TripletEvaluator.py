@@ -99,9 +99,18 @@ class TripletEvaluator(SentenceEvaluator):
                     writer.writerow([epoch, steps, accuracy_cos, accuracy_manhatten, accuracy_euclidean])
 
             else:
-                with open(csv_path, mode="a", encoding="utf-8") as f:
+                store = []
+                with open(csv_path, mode="r", encoding="utf-8") as f:
+                    read = csv.reader(f)
+                    for obj in read:
+                        if obj!=[]:
+                            store.append(obj)
+
+                with open(csv_path, mode="w", encoding="utf-8") as f:
                     writer = csv.writer(f)
-                    writer.writerow([epoch, steps, accuracy_cos, accuracy_manhatten, accuracy_euclidean])
+                    for row in store:
+                        writer.writerow(row)
+                        writer.writerow([epoch, steps, accuracy_cos, accuracy_manhatten, accuracy_euclidean])
 
         if self.main_distance_function == SimilarityFunction.COSINE:
             return accuracy_cos
